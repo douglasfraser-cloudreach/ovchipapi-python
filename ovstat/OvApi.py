@@ -1,6 +1,7 @@
 import requests
 import sys
 import json
+import time
 
 CLIENT_ID     = "nmOIiEJO5khvtLBK9xad3UkkS8Ua"
 CLIENT_SECRET = "FE8ef6bVBiyN0NeyUJ5VOWdelvQa"
@@ -45,23 +46,26 @@ class OvApi:
         as_json = response.json()
         return as_json['o']
 
-    def get_transaction_list(self, mediumId, offset = 0, locale="nl-NL"):
+    def get_transaction_list(self, mediumId, offset = 0, startDate=time.strftime("%Y-%m-01", time.gmtime()), endDate=time.strftime("%Y-%m-%d", time.gmtime()),locale="nl-NL"):
         transactions = []
 
         post_data = {"authorizationToken": self.authorizationToken,
                      "mediumId": mediumId,
                      "offset": offset,
-                     "locale": locale}
-
-        response = requests.post("https://api2.ov-chipkaart.nl/femobilegateway/v1/transaction/list", data = post_data)
+                     "locale": locale,
+                     "startDate":startDate,
+                     "endDate":endDate}
+        print(post_data)
+        response = requests.post("https://api2.ov-chipkaart.nl/femobilegateway/v1/transactions", data = post_data)
         as_json = response.json()
         transactions += as_json['o']['records']
-
-        while offset < as_json['o']['nextOffset']:
-            post_data['offset'] = as_json['o']['nextOffset']
-            response = requests.post("https://api2.ov-chipkaart.nl/femobilegateway/v1/transaction/list", data = post_data)
+        total_size = as_json['o']['totalSize']
+        offset = offset + 20
+        while offset < total_size:
+            post_data['offset'] = offset
+            response = requests.post("https://api2.ov-chipkaart.nl/femobilegateway/v1/transactions", data = post_data)
             as_json = response.json()
             transactions += as_json['o']['records']
-            offset = int(as_json['o']['nextOffset'])
+            offset = offset + 20
 
         return transactions
