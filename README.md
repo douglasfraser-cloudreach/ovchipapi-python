@@ -11,7 +11,7 @@ This will install the ovstat package.
 ```python
 from ovstat.OvApi import OvApi
 import json
-o = OvApi("Hylcoss", "Ejbmhb.12");
+o = OvApi("username", "password");
 cards = o.get_cards_list()
 for card in cards:
     records = o.get_transaction_list(card['mediumId'])
