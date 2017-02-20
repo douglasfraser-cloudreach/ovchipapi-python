@@ -46,6 +46,15 @@ class OvApi:
         as_json = response.json()
         return as_json['o']
 
+    def get_card(self,mediumId, locale="nl-NL"):
+        post_data = {"authorizationToken": self.authorizationToken,
+                     "locale": locale,
+                     "mediumId": mediumId}
+
+        response = requests.post("https://api2.ov-chipkaart.nl/femobilegateway/v1/card/", data = post_data)
+        as_json = response.json()
+        return as_json['o']
+
     def get_transaction_list(self, mediumId, offset = 0, startDate=time.strftime("%Y-%m-01", time.gmtime()), endDate=time.strftime("%Y-%m-%d", time.gmtime()),locale="nl-NL"):
         transactions = []
 
@@ -55,7 +64,6 @@ class OvApi:
                      "locale": locale,
                      "startDate":startDate,
                      "endDate":endDate}
-        print(post_data)
         response = requests.post("https://api2.ov-chipkaart.nl/femobilegateway/v1/transactions", data = post_data)
         as_json = response.json()
         transactions += as_json['o']['records']
