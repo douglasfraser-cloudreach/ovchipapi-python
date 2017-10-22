@@ -1,14 +1,15 @@
 import requests
-import sys
 import json
 import time
 
 CLIENT_ID     = "nmOIiEJO5khvtLBK9xad3UkkS8Ua"
 CLIENT_SECRET = "FE8ef6bVBiyN0NeyUJ5VOWdelvQa"
+
 class OvApi:
     def __init__(self,username,password):
         self.id_token = self.get_token(username,password)
         self.authorizationToken = self.get_authorization()
+
     def get_token(self,username, password, client_id=CLIENT_ID, client_secret=CLIENT_SECRET):
         post_data = {"username": username,
                      "password": password,
@@ -18,9 +19,10 @@ class OvApi:
                      "scope": "openid"}
 
         r = requests.post("https://login.ov-chipkaart.nl/oauth2/token", data = post_data).json()
+
         if 'id_token' not in r:
-            print(r)
-            sys.exit(-1)
+            raise AuthenticationError(r['error_description'])
+
         return r["id_token"]
 
     def refresh_token(self,refresh_token, client_id=CLIENT_ID, client_secret=CLIENT_SECRET):
@@ -77,3 +79,6 @@ class OvApi:
             offset = offset + 20
 
         return transactions
+
+class AuthenticationError(Exception):
+    """No token was returned during authentication."""
