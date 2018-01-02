@@ -9,7 +9,7 @@ setup(name='OvStat',
       install_requires=[
         "requests",
       ],
-      url = 'https://github.com/OVChip/ovchipapi-python'
-      download_url = 'https://github.com/OVChip/ovchipapi-python/tarball/0.1'
+      url = 'https://github.com/OVChip/ovchipapi-python',
+      download_url = 'https://github.com/OVChip/ovchipapi-python/tarball/0.1',
       keywords = ["OV","Public Transport","ov-chipkaart","chipkaart"]
      )
