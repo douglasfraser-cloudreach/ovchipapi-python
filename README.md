@@ -2,8 +2,8 @@
 Python OvChipkaart API Wrapper Package
 
 Install with: 
-```python
-python setup.py install 
+```bash
+python setup.py install
 ```
 This will install the ovstat package.
 
@@ -11,7 +11,7 @@ This will install the ovstat package.
 ```python
 from ovstat.OvApi import OvApi
 import json
-o = OvApi("username", "password");
+o = OvApi("username", "password")
 cards = o.get_cards_list()
 for card in cards:
     records = o.get_transaction_list(card['mediumId'])
